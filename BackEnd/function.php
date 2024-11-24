@@ -95,19 +95,24 @@ if (isset($_POST['addnewbarangmasuk'])) {
         }
     }
 
-    // Redirect setelah berhasil
-    header("Location: ../admin/masuk");
+    if ($_SESSION['role'] == 'admin') {
+        header("Location: ../admin/masuk");
+    } else {
+        header("Location: ../user/masuk");
+    }
     exit();
 }
 // FORM BARANG MASUK SELESAI        
 
 // FORM DI KELUAR.PHP
 if (isset($_POST['addbarangkeluar'])) {
+    session_start();
     $tanggal = $_POST['tanggal'];
     $user = $_POST['user'];
     $kodebarang = $_POST['kodebarang'];
     $jumlah = $_POST['jumlah'];
     $note = $_POST['note'];
+    $created_by = $_SESSION['username']; // Ambil username dari session
 
     for ($i = 0; $i < count($kodebarang); $i++) {
         $kode = mysqli_real_escape_string($conn, $kodebarang[$i]);
@@ -115,19 +120,24 @@ if (isset($_POST['addbarangkeluar'])) {
         $catatan = mysqli_real_escape_string($conn, $note[$i]);
 
         // Simpan dengan status pending
-        $queryKeluar = "INSERT INTO barang_keluar (tanggal_keluar, user, kode_barang, jumlah_keluar, note, kode_transaksi, status_approve) 
-                        VALUES ('$tanggal', '$user', '$kode', '$qty', '$catatan', '', 'pending')";
+        $queryKeluar = "INSERT INTO barang_keluar 
+                        (tanggal_keluar, user, kode_barang, jumlah_keluar, note, kode_transaksi, status_approve, created_by) 
+                        VALUES 
+                        ('$tanggal', '$user', '$kode', '$qty', '$catatan', '', 'pending', '$created_by')";
 
-        // Eksekusi query barang keluar
         if (!mysqli_query($conn, $queryKeluar)) {
             echo "Error: " . mysqli_error($conn);
         }
     }
 
-    // Redirect setelah berhasil
-    header("Location: ../admin/keluar");
+    if ($_SESSION['role'] == 'admin') {
+        header("Location: ../admin/keluar");
+    } else {
+        header("Location: ../user/keluar");
+    }
     exit();
 }
+
 
 // Fungsi Untuk APPROVED BY 
 if (isset($_POST['approveBarangKeluar'])) {

@@ -199,7 +199,7 @@ require "../header.php";
                                 <th>MAKER</th>
                                 <th>JUMLAH</th>
                                 <th>NOTE</th>
-                                <th>DETAIL</th>
+                                <!-- <th>DETAIL</th> -->
                             </tr>
                         </thead>
                         <tbody>
@@ -230,7 +230,7 @@ require "../header.php";
                                     <td><?= $maker; ?></td>
                                     <td><?= $qty; ?></td>
                                     <td><?= $note; ?></td>
-                                    <td><button class="btn btn-warning">Detail </button></td>
+                                    <!-- <td><button class="btn btn-warning">Detail </button></td> -->
                                 </tr>
                             <?php
                             }

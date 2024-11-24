@@ -1,4 +1,6 @@
 <?php
+$title = "Data Barang | Elastomix"; 
+
 session_start();
 
 // Cek apakah pengguna sudah login dan memiliki role 'user'
@@ -11,12 +13,15 @@ if (!isset($_SESSION['id']) || $_SESSION['role'] != 'user') {
 // Proses selanjutnya jika sudah login
 require "../BackEnd/function.php";
 require "../header.php";
-$title = "Data Barang | Elastomix";
+
 ?>
 <main>
     <div class="container-fluid">
         <h1 class="mt-4">List Data Item</h1>
         <div class="card mb-4">
+            <div class="card-header ">
+                <i class="fas fa-table me-1"></i>
+            </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-hover table-striped table-bordered " id="dataTable" width="100%" cellspacing="0">
@@ -33,7 +38,15 @@ $title = "Data Barang | Elastomix";
                         </thead>
                         <tbody>
                             <?php
-                            $ambilsemuastock = mysqli_query($conn, "SELECT master_barang.kode_barang, master_barang.nama_barang, master_barang.jenis_barang, COALESCE(SUM(barang_masuk.jumlah_masuk), 0) AS jumlah_masuk, COALESCE(SUM(barang_keluar.jumlah_keluar), 0) AS jumlah_keluar, master_barang.jumlah AS stok FROM master_barang LEFT JOIN barang_masuk ON master_barang.kode_barang = barang_masuk.kode_barang LEFT JOIN barang_keluar ON master_barang.kode_barang = barang_keluar.kode_barang GROUP BY master_barang.kode_barang");
+                            $ambilsemuastock = mysqli_query($conn, "SELECT master_barang.kode_barang, master_barang.nama_barang, master_barang.jenis_barang, 
+                            COALESCE(SUM(barang_masuk.jumlah_masuk), 0) AS jumlah_masuk, 
+                            COALESCE(SUM(CASE WHEN barang_keluar.status_approve = 'approved' THEN barang_keluar.jumlah_keluar ELSE 0 END), 0) AS jumlah_keluar, 
+                            master_barang.jumlah AS stok 
+                            FROM master_barang 
+                            LEFT JOIN barang_masuk ON master_barang.kode_barang = barang_masuk.kode_barang 
+                            LEFT JOIN barang_keluar ON master_barang.kode_barang = barang_keluar.kode_barang 
+                            GROUP BY master_barang.kode_barang
+                            ");
                             $i = 1;
                             while ($data = mysqli_fetch_array($ambilsemuastock)) {
                                 $kbarang = $data['kode_barang'];

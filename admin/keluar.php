@@ -1,13 +1,14 @@
 <?php
 $title = "Barang Keluar | Elastomix";
 require "../BackEnd/function.php";
-require "../BackEnd/check_role.php"; // Pastikan jalur file benar
+require "../BackEnd/check_role.php";
+require "../BackEnd/helper.php";
+// require "../BackEnd/approve.php"; 
 include "../header.php";
 ?>
 <main>
     <div class="container-fluid">
         <h1 class="mt-4">Data Keluar</h1>
-
         <!-- Button trigger modal -->
         <button type="button" style="border-radius: 10px; background-color:red; color:white" class="btn" data-bs-toggle="modal" data-bs-target="#exampleModal">
             TAMBAH DATA KELUAR BARANG
@@ -209,33 +210,40 @@ include "../header.php";
 
         <!-- tabel hasil data -->
         <div class="card mb-4 mt-2">
+            <div class="card-header ">
+                <i class="fas fa-table me-1"></i>
+            </div>
             <div class="card-body">
+
                 <div class="table-responsive">
                     <table class="table table-hover table-striped table-bordered " id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th>KODE BARANG</th>
+                                <th>KODE BARANG </th>
                                 <th>TANGGAL</th>
                                 <th>USER</th>
                                 <th>JENIS BARANG</th>
-                                <th>NAMA BARANG</th>
+                                <th>NAMA BARANG </th>
                                 <th>MAKER</th>
                                 <th>JUMLAH</th>
                                 <th>NOTE</th>
-                                <th>APPROVE BY:</th>
-                                <th>Detail</th>
+                                <th>STATUS</th>
+                                <th>APPROVE BY</th>
+                                <!-- <th>Detail</th> -->
                             </tr>
                         </thead>
                         <tbody>
                             <?php
                             $ambilsemuadatakeluar = mysqli_query($conn, "
-                                        SELECT bk.kode_barang, bk.tanggal_keluar, bk.user, 
-                                               bk.jumlah_keluar, bk.note,
-                                               mb.jenis_barang, mb.nama_barang, mb.maker 
-                                        FROM barang_keluar bk
-                                        LEFT JOIN master_barang mb ON bk.kode_barang = mb.kode_barang
-                                        ORDER BY bk.tanggal_keluar DESC
-                                    ");
+                          SELECT bk.id, bk.kode_barang, bk.tanggal_keluar, bk.user, 
+                                 bk.jumlah_keluar, bk.note, bk.status_approve, bk.alasan,
+                                 mb.jenis_barang, mb.nama_barang, mb.maker 
+                          FROM barang_keluar bk
+                          LEFT JOIN master_barang mb ON bk.kode_barang = mb.kode_barang
+                          ORDER BY bk.tanggal_keluar DESC
+                      ");
+
+
 
                             $i = 1;
                             while ($data = mysqli_fetch_array($ambilsemuadatakeluar)) {
@@ -257,8 +265,28 @@ include "../header.php";
                                     <td><?= $maker; ?></td>
                                     <td><?= $jumlah_keluar; ?></td>
                                     <td><?= $note; ?></td>
-                                    <td><Button class="btn btn-primary">Example: Dept PGA</Button></td>
-                                    <td><Button class="btn btn-warning">Detail</Button></td>
+                                    <td>
+                                        <?php if ($data['status_approve'] == 'pending') { ?>
+                                            <form method="POST" action="../BackEnd/approve.php" style="display: inline;">
+
+                                                <input type="hidden" name="id_keluar" value="<?= $data['id']; ?>">
+                                                <input type="hidden" name="user" value="<?= $user; ?>">
+                                                <button type="submit" name="action" value="approve" class="btn btn-success btn-sm">✔️ Approve</button>
+                                            </form>
+                                            <form method="POST" action="../backend/approve.php" style="display: inline;">
+                                                <input type="hidden" name="id_keluar" value="<?= $data['id']; ?>">
+                                                <input type="hidden" name="user" value="<?= $user; ?>">
+                                                <button type="submit" name="action" value="reject" class="btn btn-danger btn-sm">❌ Reject</button>
+                                            </form>
+                                        <?php } else { ?>
+                                            <span class="badge <?= $data['status_approve'] == 'approved' ? 'bg-success' : 'bg-danger'; ?>">
+                                                <?= ucfirst($data['status_approve']); ?>
+                                            </span>
+                                            <br>
+                                            <small><?= $data['alasan']; ?></small>
+                                        <?php } ?>
+                                    </td>
+                                    <td></td>
                                 </tr>
                             <?php
                             }
@@ -271,6 +299,7 @@ include "../header.php";
             </div>
         </div>
         <!-- tabel hasil data End -->
-    </div>
+    </div>  
 </main>
 <?php include "../footer.php"; ?>
+

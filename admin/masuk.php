@@ -179,6 +179,9 @@ include "../header.php";
 
         <!-- tabel hasil data -->
         <div class="card mb-4 mt-2">
+            <div class="card-header ">
+                <i class="fas fa-table me-1"></i>
+            </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-hover table-striped table-bordered " id="dataTable" width="100%" cellspacing="0">
@@ -192,7 +195,7 @@ include "../header.php";
                                 <th>MAKER</th>
                                 <th>JUMLAH</th>
                                 <th>NOTE</th>
-                                <th>DETAIL</th>
+                                <!-- <th>DETAIL</th> -->
                             </tr>
                         </thead>
                         <tbody>
@@ -223,7 +226,7 @@ include "../header.php";
                                     <td><?= $maker; ?></td>
                                     <td><?= $qty; ?></td>
                                     <td><?= $note; ?></td>
-                                    <td><button class="btn btn-warning">Detail </button></td>
+                                    <!-- <td><button class="btn btn-warning">Detail </button></td> -->
                                 </tr>
                             <?php
                             }

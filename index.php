@@ -31,6 +31,7 @@ if (isset($_POST['login'])) {
   }
 }
 
+
 ?>
 
 <!DOCTYPE html>
@@ -50,7 +51,8 @@ if (isset($_POST['login'])) {
     }
 
     .background {
-      background-image: url('assets/img/Elastomix-Indonesia-28Feb.jpg');
+      /* background-image: url('assets/img/Elastomix-Indonesia-28Feb.jpg'); */
+      background-color: #45a049;
       background-size: cover;
       background-position: center;
       height: 100%;
@@ -127,5 +129,4 @@ if (isset($_POST['login'])) {
     </div>
   </div>
 </body>
-
 </html>

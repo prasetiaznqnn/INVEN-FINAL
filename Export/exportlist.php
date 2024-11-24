@@ -1,5 +1,6 @@
 <?php
 require "../BackEnd/function.php";
+session_start();
 
 // Cek apakah pengguna sudah login dan memiliki role 'admin'
 if (!isset($_SESSION['id']) || $_SESSION['role'] != 'admin') {
@@ -17,6 +18,8 @@ if (!isset($_SESSION['id']) || $_SESSION['role'] != 'admin') {
 //     header("Location: ../index.php");
 //     exit();
 // }
+
+// Proses selanjutnya jika sudah login
 ?>
 <html>
 

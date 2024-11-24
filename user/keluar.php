@@ -231,23 +231,14 @@ require "../header.php";
                                 <th>MAKER</th>
                                 <th>JUMLAH</th>
                                 <th>NOTE</th>
+                                <th>STATUS</th>
                                 <th>APPROVE BY:</th>
-                                <th>Detail</th>
 
                             </tr>
                         </thead>
                         <tbody>
                             <?php
-                            $ambilsemuadatakeluar = mysqli_query($conn, "
-                                        SELECT bk.kode_barang, bk.tanggal_keluar, bk.user, 
-                                               bk.jumlah_keluar, bk.note,
-                                               mb.jenis_barang, mb.nama_barang, mb.maker 
-                                        FROM barang_keluar bk
-                                        LEFT JOIN master_barang mb ON bk.kode_barang = mb.kode_barang
-                                        ORDER BY bk.tanggal_keluar DESC
-                                    ");
-
-                            $i = 1;
+                            $ambilsemuadatakeluar = mysqli_query($conn, "SELECT bk.kode_barang, bk.tanggal_keluar, bk.user, bk.jumlah_keluar, bk.note, bk.status_approve, bk.alasan, bk.created_by, mb.jenis_barang, mb.nama_barang, mb.maker FROM barang_keluar bk LEFT JOIN master_barang mb ON bk.kode_barang = mb.kode_barang ORDER BY bk.tanggal_keluar DESC");
                             while ($data = mysqli_fetch_array($ambilsemuadatakeluar)) {
                                 $kode_barang = $data['kode_barang'];
                                 $tanggal_keluar = $data['tanggal_keluar'];
@@ -257,6 +248,18 @@ require "../header.php";
                                 $maker = $data['maker'];
                                 $jumlah_keluar = $data['jumlah_keluar'];
                                 $note = $data['note'];
+                                $status_approve = $data['status_approve'];
+                                $created_by = $data['created_by']; // Ambil username
+
+                                // Tentukan status approve yang ditampilkan dengan background warna
+                                $approve_status = ''; // Inisialisasi variabel
+                                if ($status_approve == 'pending') {
+                                    $approve_status = '<span class="badge bg-warning">Pending</span>';
+                                } elseif ($status_approve == 'approved') {
+                                    $approve_status = '<span class="badge bg-success">Approved</span>';
+                                } elseif ($status_approve == 'rejected') {
+                                    $approve_status = '<span class="badge bg-danger">Rejected</span>';
+                                }
                             ?>
                                 <tr>
                                     <td><?= $kode_barang; ?></td>
@@ -267,13 +270,15 @@ require "../header.php";
                                     <td><?= $maker; ?></td>
                                     <td><?= $jumlah_keluar; ?></td>
                                     <td><?= $note; ?></td>
-                                    <td><Button class="btn btn-primary">Example: Dept PGA</Button></td>
-                                    <td><Button class="btn btn-warning">Detail</Button></td>
+                                    <td><?= $approve_status; ?></td>
+                                    <td><?= $created_by; ?></td>
                                 </tr>
                             <?php
                             }
                             ?>
                         </tbody>
+
+
 
 
                     </table>

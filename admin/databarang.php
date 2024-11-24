@@ -105,12 +105,15 @@ require "../BackEnd/check_role.php";
 
         <!-- tabel hasil data -->
         <div class="card mb-4 mt-2">
+            <div class="card-header ">
+                <i class="fas fa-table me-1"></i>
+            </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-hover table-striped table-bordered " id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th>NO</th>
+                                <th>NO <i class="bi bi-airplane"></i></th>
                                 <th>KODE BARANG</th>
                                 <th>JENIS BARANG</th>
                                 <th>NAMA BARANG</th>
