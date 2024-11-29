@@ -1,0 +1,226 @@
+// UPDATE BARANG MASTER START if (isset($_POST['update_barang'])) {
+$kode_barang_old = $_POST['kode_barang_old']; $kode_barang =
+$_POST['kode_barang']; $jenis_barang = $_POST['jenis_barang']; $nama_barang =
+$_POST['nama_barang']; $deskripsi = $_POST['deskripsi']; $maker =
+$_POST['maker']; $jumlah = $_POST['jumlah']; $query = "UPDATE master_barang SET
+kode_barang = '$kode_barang', jenis_barang = '$jenis_barang', nama_barang =
+'$nama_barang', deskripsi = '$deskripsi', maker = '$maker', jumlah = '$jumlah'
+WHERE kode_barang = '$kode_barang_old'"; if (mysqli_query($conn, $query)) {
+header("Location: ../admin/databarang"); } exit(); } // UPDATE BARANG MASTER END
+// HAPUS BARANG MASTER START if (isset($_POST['delete_barang'])) { $kode_barang
+= $_POST['kode_barang']; $query = "DELETE FROM master_barang WHERE kode_barang =
+'$kode_barang'"; if (mysqli_query($conn, $query)) { header("Location:
+../admin/databarang"); } else { echo "
+<script>
+  alert("Gagal hapus barang");
+</script>
+"; } exit(); } // HAPUS BARANG KELUAR END
+
+<!-- tombol modal nyaaaa -->
+<td>
+  <button
+    class="btn btn-warning btn-edit"
+    data-bs-toggle="modal"
+    data-bs-target="#editModal"
+    data-id="<?= $kbarang; ?>"
+    data-jenis="<?= $jenisBarang; ?>"
+    data-nama="<?= $namabarang; ?>"
+    data-deskripsi="<?= $deskripsi; ?>"
+    data-maker="<?= $maker; ?>"
+    data-qty="<?= $qty; ?>"
+  >
+    Edit
+  </button>
+  <button
+    class="btn btn-danger btn-delete"
+    data-bs-toggle="modal"
+    data-bs-target="#deleteModal"
+    data-id="<?= $kbarang; ?>"
+  >
+    Hapus
+  </button>
+</td>
+<!-- END -->
+
+<!-- MODAL EDIT START -->
+<div
+  class="modal fade"
+  id="editModal"
+  tabindex="-1"
+  aria-labelledby="editModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-warning">
+        <h5 class="modal-title text-white" id="editModalLabel">
+          Edit Master Barang
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form action="../BackEnd/function.php" method="POST">
+          <input
+            type="hidden"
+            id="editKodeBarangHidden"
+            name="kode_barang_old"
+          />
+          <!-- Untuk kode lama -->
+          <div class="form-group mb-3">
+            <label for="editKodeBarang">Kode Barang</label>
+            <input
+              type="text"
+              id="editKodeBarang"
+              name="kode_barang"
+              class="form-control"
+              required
+            />
+          </div>
+          <div class="form-group mb-3">
+            <label for="editJenisBarang">Jenis Barang</label>
+            <input
+              type="text"
+              id="editJenisBarang"
+              name="jenis_barang"
+              class="form-control"
+              required
+            />
+          </div>
+          <div class="form-group mb-3">
+            <label for="editNamaBarang">Nama Barang</label>
+            <input
+              type="text"
+              id="editNamaBarang"
+              name="nama_barang"
+              class="form-control"
+              required
+            />
+          </div>
+          <div class="form-group mb-3">
+            <label for="editDeskripsi">Deskripsi</label>
+            <input
+              type="text"
+              id="editDeskripsi"
+              name="deskripsi"
+              class="form-control"
+              required
+            />
+          </div>
+          <div class="form-group mb-3">
+            <label for="editMaker">Maker</label>
+            <input
+              type="text"
+              id="editMaker"
+              name="maker"
+              class="form-control"
+              required
+            />
+          </div>
+          <div class="form-group mb-3">
+            <!-- <label for="editJumlah">Jumlah</label> -->
+            <input
+              type="hidden"
+              id="editJumlah"
+              name="jumlah"
+              class="form-control"
+              required
+            />
+          </div>
+          <button type="submit" class="btn btn-primary" name="update_barang">
+            Update
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- MODAL EDIT END -->
+
+<!-- MODAL HAPUS START -->
+<div
+  class="modal fade"
+  id="deleteModal"
+  tabindex="-1"
+  aria-labelledby="deleteModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-danger">
+        <h5 class="modal-title text-white" id="deleteModalLabel">
+          Konfirmasi Hapus
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p>Apakah Anda yakin ingin menghapus barang ini?</p>
+        <p>
+          <strong>Kode Barang: <span id="deleteKodeBarang"></span></strong>
+        </p>
+      </div>
+      <div class="modal-footer">
+        <form action="../BackEnd/function.php" method="POST">
+          <input type="hidden" id="deleteKodeBarangInput" name="kode_barang" />
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Batal
+          </button>
+          <button type="submit" class="btn btn-danger" name="delete_barang">
+            Hapus
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL HAPUS START -->
+
+<!-- SCRIPT MODAL START-->
+<script>
+  // SCRIPT EDIT START
+  document.querySelectorAll(".btn-edit").forEach((button) => {
+    button.addEventListener("click", function () {
+      const kodeBarang = this.getAttribute("data-id");
+      const jenisBarang = this.getAttribute("data-jenis");
+      const namaBarang = this.getAttribute("data-nama");
+      const deskripsi = this.getAttribute("data-deskripsi");
+      const maker = this.getAttribute("data-maker");
+      const qty = this.getAttribute("data-qty");
+
+      document.getElementById("editKodeBarang").value = kodeBarang;
+      document.getElementById("editKodeBarangHidden").value = kodeBarang;
+      document.getElementById("editJenisBarang").value = jenisBarang;
+      document.getElementById("editNamaBarang").value = namaBarang;
+      document.getElementById("editDeskripsi").value = deskripsi;
+      document.getElementById("editMaker").value = maker;
+      document.getElementById("editJumlah").value = qty;
+    });
+  });
+  // SCRIPT EDIT END
+
+  // SCRIPT HAPUS START
+
+  document.querySelectorAll(".btn-delete").forEach((button) => {
+    button.addEventListener("click", function () {
+      const kodeBarang = this.getAttribute("data-id");
+      document.getElementById("deleteKodeBarang").textContent = kodeBarang;
+      document.getElementById("deleteKodeBarangInput").value = kodeBarang;
+    });
+  });
+  // SCRIPT HAPUS END
+</script>
+<!-- SCRIPT MODAL END -->
